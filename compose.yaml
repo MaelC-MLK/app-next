@@ -1,0 +1,47 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" 
+    volumes:
+      - .:/app      
+      - /app/node_modules 
+    environment:
+      - NODE_ENV=development
+      - POSTGRES_USER=user_wtperm
+      - POSTGRES_DB=projet
+      - POSTGRES_PASSWORD=drowssap
+    networks:
+      - db-network
+
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: drowssap
+      POSTGRES_DB: projet
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - db-network
+    
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: drowssap
+    ports:
+      - "5050:80"
+    networks:
+      - db-network
+    depends_on:
+      - db
+
+volumes:
+  db-data:
+
+networks:
+  db-network:
