@@ -16,4 +16,12 @@ bun dev
 
 ## Fonctionnalités semaines 22/11/2024
 
+Fonctionnalités : 
+
+- Début dashboard
+- Navigation possible entre gestion et intervenant
+- Connection en bdd et bdd crée
+- Possibisilité d'intéragir avec la bdd
+- Affichage des intervenants dans la route intervenant
+
 
