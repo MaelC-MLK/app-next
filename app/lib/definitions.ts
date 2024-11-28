@@ -16,3 +16,10 @@ export type IntervenantForm = {
   lastname: string;
   enddate: string;
 }
+
+export type User = {
+  id: string;
+  name?: string;
+  email: string;
+  password: string;
+};

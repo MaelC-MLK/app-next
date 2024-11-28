@@ -7,8 +7,30 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { addMonths, format } from 'date-fns';
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
+
 
 const ITEMS_PER_PAGE = 10;
+ 
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  try {
+    await signIn('credentials', formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Email ou mot de passe incorrect !';
+        default:
+          return 'Something went wrong.';
+      }
+    }
+    throw error;
+  }
+}
 
 export async function regenAllKeys() {
   try {
