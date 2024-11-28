@@ -8,3 +8,11 @@ export interface Intervenant {
   enddate: string;
   availability: string | null;
 }
+
+export type IntervenantForm = {
+  id: number;
+  email: string;
+  firstname: string;
+  lastname: string;
+  enddate: string;
+}

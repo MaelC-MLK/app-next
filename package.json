@@ -10,11 +10,15 @@
     "@heroicons/react": "^2.2.0",
     "@prisma/client": "^5.22.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "heroicons": "^2.1.5",
     "next": "15.0.3",
     "pg": "^8.13.1",
     "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106"
+    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "use-debounce": "^10.0.4",
+    "uuid": "^11.0.3",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
