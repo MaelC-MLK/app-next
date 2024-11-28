@@ -14,8 +14,8 @@ pnpm dev
 bun dev
 ```
 
-## Fonctionnalités semaines 22/11/2024
+## Fonctionnalités semaines 29/11/2024
 
-- Début itération 4
+- Itération 10
 
 
