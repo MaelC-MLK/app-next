@@ -16,6 +16,6 @@ bun dev
 
 ## Fonctionnalités semaines 29/11/2024
 
-- Itération 10
+- Milieu itération 12
 
 
