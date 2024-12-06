@@ -144,11 +144,17 @@ export async function regenKey(id: number): Promise<void> {
   try {
     const client = await db.connect();
     const newKey = uuidv4();
-    await client.query('UPDATE public.intervenants SET key = $1 WHERE id = $2', [newKey, id]);
+    const creationDate = new Date();
+    const endDate = addMonths(creationDate, 2);
+    await client.query(`
+      UPDATE public.intervenants
+      SET key = $1, creationdate = $2, enddate = $3
+      WHERE id = $4
+    `, [newKey, format(creationDate, 'yyyy-MM-dd'), format(endDate, 'yyyy-MM-dd'), id]);
     revalidatePath('/dashboard/intervenants');
     client.release();
   } catch (err) {
-    console.error(err);
+    console.error('Failed to regenerate key:', err);
     throw err;
   }
 }
@@ -268,4 +274,16 @@ export async function updateIntervenant(prevState: UpdateState, formData: FormDa
 
   revalidatePath('/dashboard/intervenants');
   redirect('/dashboard/intervenants');
+}
+
+export async function fetchIntervenantByKey(key: string): Promise<Intervenant | undefined> {
+  try {
+    const client = await db.connect();
+    const result = await client.query('SELECT * FROM public.intervenants WHERE key = $1', [key]);
+    client.release();
+    return result.rows[0] as Intervenant;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch intervenant by key.');
+  }
 }

@@ -2,6 +2,7 @@ import { fetchFilteredIntervenants } from "@/app/lib/action";
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { format, isBefore } from 'date-fns';
 import { DeleteIntervenant, UpdateIntervenant, CopyKeyButton, RegenKey } from "@/app/ui/dashboard/intervenants/buttonsIntervenants";
+import CopyLinkButton from "@/app/ui/dashboard/intervenants/CopyLinkButton";
 
 export default async function InvoicesTable({
   query,
@@ -46,7 +47,7 @@ export default async function InvoicesTable({
                   Email
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Key
+                  Lien d'accès
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Validité de la clé
@@ -74,7 +75,7 @@ export default async function InvoicesTable({
                     {intervenant.email}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {intervenant.key}
+                    <CopyLinkButton intervenantKey={intervenant.key} />
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     <div className="flex items-center gap-2">

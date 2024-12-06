@@ -98,6 +98,7 @@ export function RegenKey({ id }: { id: number }) {
     try {
       await regenKey(id);
       setShowPopup(false);
+      window.location.reload(); // Recharger la page pour mettre à jour les données
     } catch (error) {
       console.error('Failed to regenerate key:', error);
     }
@@ -114,7 +115,7 @@ export function RegenKey({ id }: { id: number }) {
       </button>
       {showPopup && (
         <ConfirmationPopup
-          title="Voulez vous régénérer la clé ?"
+          title="Confirmation"
           message="Êtes-vous sûr de vouloir régénérer la clé de cet intervenant ?"
           onConfirm={handleRegenKey}
           onCancel={() => setShowPopup(false)}
