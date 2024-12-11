@@ -4,53 +4,17 @@
 
 @layer base {
     :root {
-      --background: 0 0% 100%;  /* hsl(0 0% 100%) */
-      --foreground: 224 71.4% 4.1%; /* hsl(224 71.4% 4.1%) */
-      --muted: 220 14.3% 95.9%; /* hsl(220 14.3% 95.9%) */
-      --muted-foreground: 220 8.9% 46.1%; /* hsl(220 8.9% 46.1%) */
-      --popover: 0 0% 100%; /* hsl(0 0% 100%) */
-      --popover-foreground: 224 71.4% 4.1%; /* hsl(224 71.4% 4.1%) */
-      --card: 0 0% 100%; /* hsl(0 0% 100%) */
-      --card-foreground: 224 71.4% 4.1%; /* hsl(224 71.4% 4.1%) */
       --border: 220 13% 91%; /* hsl(220 13% 91%) */
       --input: 220 13% 91%; /* hsl(220 13% 91%) */
-      --primary: 262.1 83.3% 57.8%; /* hsl(262.1 83.3% 57.8%) */
-      --primary-foreground: 210 20% 98%; /* hsl(210 20% 98%) */
-      --secondary: 220 14.3% 95.9%; /* hsl(220 14.3% 95.9%) */
-      --secondary-foreground: 220.9 39.3% 11%; /* hsl(220.9 39.3% 11%) */
-      --accent: 220 14.3% 95.9%; /* hsl(220 14.3% 95.9%) */
-      --accent-foreground: 220.9 39.3% 11%; /* hsl(220.9 39.3% 11%) */
-      --destructive: 0 84.2% 60.2%; /* hsl(0 84.2% 60.2%) */
-      --destructive-foreground: 210 20% 98%; /* hsl(210 20% 98%) */
-      --ring: 262.1 83.3% 57.8%; /* hsl(262.1 83.3% 57.8%) */
       --radius: 0.5rem; /* 8px */
-  
-      --dark-color: 224 71.4% 4.1%; /* hsl(224 71.4% 4.1%) */
-  
-      
     }
   
     .dark {
-      --background: 224 71.4% 4.1%; /* hsl(224 71.4% 4.1%) */
-      --foreground: 210 20% 98%; /* hsl(210 20% 98%) */
-      --muted: 215 27.9% 16.9%; /* hsl(215 27.9% 16.9%) */
-      --muted-foreground: 217.9 10.6% 64.9%; /* hsl(217.9 10.6% 64.9%) */
-      --popover: 224 71.4% 4.1%; /* hsl(224 71.4% 4.1%) */
-      --popover-foreground: 210 20% 98%; /* hsl(210 20% 98%) */
-      --card: 224 71.4% 4.1%; /* hsl(224 71.4% 4.1%) */
-      --card-foreground: 210 20% 98%; /* hsl(210 20% 98%) */ 
       --border: 215 27.9% 16.9%; /* hsl(215 27.9% 16.9%) */
       --input: 215 27.9% 16.9%; /* hsl(215 27.9% 16.9%) */
-      --primary: 263.4 70% 50.4%; /* hsl(263.4 70% 50.4%) */
-      --primary-foreground: 210 20% 98%; /* hsl(210 20% 98%) */
-      --secondary: 215 27.9% 16.9%; /* hsl(215 27.9% 16.9%) */
-      --secondary-foreground: 210 20% 98%; /* hsl(210 20% 98%) */
-      --accent: 215 27.9% 16.9%; /* hsl(215 27.9% 16.9%) */
-      --accent-foreground: 210 20% 98%; /* hsl(210 20% 98%) */
-      --destructive: 0 62.8% 30.6%; /* hsl(0 62.8% 30.6%) */
-      --destructive-foreground: 210 20% 98%; /* hsl(210 20% 98%) */
       --ring: 263.4 70% 50.4%; /* hsl(263.4 70% 50.4%) */
     }
+    
   }
 
   
@@ -59,6 +23,7 @@
   .fc-view-harness {
     overflow-y: auto;
     margin-top: 0.5rem;
+    margin-bottom: 2rem;
   }
   
   .fc-day{
@@ -89,6 +54,8 @@
     margin-left: 1rem !important;
     margin-right: 1rem !important;
   }
+
+
   
   @media (min-width: 1024px) {
     .fc-header-toolbar{
@@ -115,34 +82,7 @@
     background-color: hsl(var(--background, transparent)) !important;
     color: hsl(var(--foreground, currentColor)) !important; 
   }
-  .fc-today-button:hover {
-    background-color: hsl(var(--primary-foreground, currentColor)) !important; 
-    color: black;
-  }
   
-  .fc-today-button:focus-visible {
-    outline: 2px solid rgba(0, 0, 0, 0.5) !important; /* focus-visible:ring-ring (remplacer la couleur si nécessaire) */
-    outline-offset: 2px !important; /* focus-visible:ring-offset-2 */
-  }
-  
-  .fc-today-button:focus-visible {
-    box-shadow: 0 0 0 2px hsl(var(--ring-color, currentColor)), 0 0 0 var(--ring-offset-width, 0) var(--ring-offset-color, hsl(var(--background, transparent))) !important;
-  }
-  
-  .fc-today-button:disabled {
-    pointer-events: none !important; /* disabled:pointer-events-none */
-    opacity: 0.5 !important; /* disabled:opacity-50 */
-  }
-  
-
-  .fc-today-button:focus,
-  .fc-next-button:focus,
-  .fc-prev-button:focus,
-  .fc-timeGridDay-button:focus,
-  .fc-timeGridWeek-button:focus,
-  .fc-dayGridMonth-button:focus {
-    box-shadow: none !important; /* Ajoutez cette ligne */
-  }
   
   .fc-next-button,
   .fc-prev-button{
@@ -158,13 +98,6 @@
     border: none !important;
     cursor: pointer !important;
     outline: none !important; 
-  }
-  
-  .fc-prev-button:hover {
-    background-color: #f5f5f5 !important; 
-  }
-  .fc-next-button:hover {
-    background-color: #f5f5f5 !important; 
   }
   
   .fc-timeGridDay-button{
@@ -214,39 +147,6 @@
     border: 1px solid hsl(var(--input, currentColor)) !important; 
     background-color: hsl(var(--background, transparent)) !important;
     color: hsl(var(--muted-foreground, currentColor)) !important; 
-  }
-  .fc-timeGridDay-button:hover,
-  .fc-timeGridWeek-button:hover,
-  .fc-dayGridMonth-button:hover {
-    color: hsl(var(--primary-background, currentColor)) !important; /* active:text-secondary-foreground */
-  }
-  
-  .fc-timeGridDay-button.fc-button-active,
-  .fc-timeGridWeek-button.fc-button-active,
-  .fc-dayGridMonth-button.fc-button-active {
-    background-color: hsl(var(--muted, currentColor)) !important; /* active:bg-secondary */
-    font-weight: 600 !important; /* font-semibold */
-    color: hsl(var(--primary-background, currentColor)) !important; /* active:text-secondary-foreground */
-  }
-  
-  .fc-timegrid-slot-label-cushion {
-    font-size: .7rem !important;
-    color: hsl(var(--muted-foreground)) !important;
-  
-  }
-  
-  .fc-theme-standard td, .fc-theme-standard th {
-    border-color: hsl(var(--border)) !important;
-  }
-  
-  .fc-scrollgrid, .fc-scrollgrid-liquid {
-    border-top-left-radius: 1rem !important; 
-    border-top-right-radius: 1rem !important; 
-    
-  }
-  
-  .fc-direction-ltr .fc-toolbar > * > :not(:first-child) {
-    margin-left: 0rem !important;
   }
   
   @media (max-width: 768px) {

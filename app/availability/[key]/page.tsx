@@ -1,9 +1,9 @@
 import { fetchIntervenantByKey} from '@/app/lib/action';
 import { notFound } from 'next/navigation';
 import Calendar from '@/app/ui/calendar';
-import { formatISO } from 'date-fns';
+import SideNavCalendar from '@/app/ui/sideNavCalendar';
 
-export default async function AvailabilityPage({ params }: { params: { key: string } }) {
+export default async function Page({ params }: { params: { key: string } }) {
   const { key } = params;
 
   const intervenants = await fetchIntervenantByKey(key);
@@ -27,8 +27,9 @@ export default async function AvailabilityPage({ params }: { params: { key: stri
 
   return (
     <main>
-      {/* <Calendar events={events} /> */}
-      <Calendar events={[]} />
+            
+      <h1>Disponibilités de {intervenants.firstname}</h1>
+      <Calendar availability={intervenants.availability ?? ''} />
     </main>
   );
 }
