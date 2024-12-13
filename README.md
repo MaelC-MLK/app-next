@@ -14,8 +14,8 @@ pnpm dev
 bun dev
 ```
 
-## Fonctionnalités semaines 29/11/2024
+## Fonctionnalités semaines 13/12/2024
 
-- Milieu itération 12
+- Itération 13
 
 
