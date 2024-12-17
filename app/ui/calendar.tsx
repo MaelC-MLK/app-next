@@ -43,7 +43,7 @@ export default function Calendar({
     }[]
   >([]);
   const [availabilities, setAvailabilities] = useState<Availability>(
-    JSON.parse(availability)
+    availability ? JSON.parse(availability) : {}
   );
 
   const handleWindowResize = () => {
@@ -95,6 +95,12 @@ export default function Calendar({
         "samedi",
         "dimanche",
       ];
+
+      // Vérifiez si availability est défini et non vide
+      if (!availability) {
+        return events;
+      }
+
       availability = JSON.parse(availability);
 
       const Currentyear = new Date().getFullYear();

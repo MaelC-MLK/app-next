@@ -1,7 +1,6 @@
 import { fetchIntervenantByKey} from '@/app/lib/action';
 import { notFound } from 'next/navigation';
 import Calendar from '@/app/ui/calendar';
-import SideNavCalendar from '@/app/ui/sideNavCalendar';
 
 export default async function Page({ params }: { params: { key: string } }) {
   const { key } = params;

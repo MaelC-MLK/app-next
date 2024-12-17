@@ -2,16 +2,12 @@
 
 import {
   UserGroupIcon,
-  HomeIcon,
-  ClockIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
 const links = [
-  { name: 'Home', href: '/dashboard', icon: HomeIcon },
-  { name: 'Disponibilites', href: '/dashboard/disponibilites', icon: ClockIcon },
   { name: 'Intervenants', href: '/dashboard/intervenants', icon: UserGroupIcon },
 ];
 
