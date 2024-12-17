@@ -67,6 +67,9 @@ export default function Calendar({ availability, intervenantId }: { availability
     
       for (const weekStart of allWeeks) {
         const weekNumber = format(weekStart, 'I'); 
+        if (weekNumber === '52' || weekNumber === '1') {
+          continue; // Ignore weeks 52 and 1
+        }
         if (!availability[`S${weekNumber}`] && availability.default !== null) {
           availability[`S${weekNumber}`] = availability.default;
         }
@@ -111,7 +114,7 @@ export default function Calendar({ availability, intervenantId }: { availability
     
       return events;
     }
-
+  
     const transformedEvents = AvailabilityIntoEvents(availability);
     setEvents(transformedEvents);
   }, [availability]);
@@ -119,31 +122,38 @@ export default function Calendar({ availability, intervenantId }: { availability
   const handleSelect = async (selectInfo: any) => {
     const { start, end } = selectInfo;
     const weekNumber = format(start, 'I');
+  
+    // Vérifiez si la semaine est 52 ou 1
+    if (weekNumber === '52' || weekNumber === '1') {
+      alert("Vous ne pouvez pas créer de disponibilités pour les semaines 52 et 1.");
+      return;
+    }
+  
     const day = start.toLocaleDateString('fr-FR', { weekday: 'long' });
-
+  
     const newAvailability = {
       days: day,
       from: format(start, 'HH:mm'),
       to: format(end, 'HH:mm')
     };
-
+  
     setAvailabilities((prev) => {
       const updated = { ...prev };
-
+  
       // Si la semaine est par défaut, copiez les disponibilités par défaut dans la semaine spécifique
       if (!updated[`S${weekNumber}`] && updated.default) {
         updated[`S${weekNumber}`] = [...updated.default];
       }
-
+  
       if (!updated[`S${weekNumber}`]) {
         updated[`S${weekNumber}`] = [];
       }
-
+  
       // Vérifiez si une entrée avec les mêmes horaires existe déjà
       const existingEntry = updated[`S${weekNumber}`].find(
         (a: any) => a.from === newAvailability.from && a.to === newAvailability.to
       );
-
+  
       if (existingEntry) {
         // Ajoutez le nouveau jour à l'entrée existante
         const existingDays = existingEntry.days.split(', ');
@@ -154,10 +164,10 @@ export default function Calendar({ availability, intervenantId }: { availability
         // Ajoutez une nouvelle entrée
         updated[`S${weekNumber}`].push(newAvailability);
       }
-
+  
       return updated;
     });
-
+  
     setEvents((prev) => [
       ...prev,
       {
@@ -167,11 +177,12 @@ export default function Calendar({ availability, intervenantId }: { availability
         groupId: `S${weekNumber}`
       }
     ]);
-
+  
     console.log(availabilities);
-
+  
     await updateAvailability(intervenantId, availabilities); // Appelez la fonction pour mettre à jour les disponibilités
   };
+  
 
   const handleEventClick = async (clickInfo: any) => {
     const { event } = clickInfo;
