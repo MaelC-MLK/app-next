@@ -13,6 +13,39 @@ import { AuthError } from 'next-auth';
 
 const ITEMS_PER_PAGE = 10;
  
+const AvailabilitySchema = z.object({
+  days: z.string().nonempty(),
+  from: z.string().nonempty(),
+  to: z.string().nonempty(),
+});
+
+const UpdateAvailabilitySchema = z.record(z.string(), z.array(AvailabilitySchema));
+
+export async function updateAvailability(intervenantId: string, availability: Record<string, { days: string; from: string; to: string }[]>) {
+  const validatedAvailability = UpdateAvailabilitySchema.safeParse(availability);
+  if (!validatedAvailability.success) {
+    return {
+      errors: validatedAvailability.error.flatten().fieldErrors,
+      message: 'Invalid availability data.',
+    };
+  }
+
+  try {
+    const client = await db.connect();
+    await client.query(`
+      UPDATE public.intervenants
+      SET availability = $1
+      WHERE id = $2
+    `, [JSON.stringify(validatedAvailability.data), intervenantId]);
+    client.release();
+    return { message: 'Availability updated successfully.' };
+  } catch (error) {
+    console.error('Database Error:', error);
+    return { message: 'Database Error: Failed to update availability.' };
+  }
+}
+
+
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,

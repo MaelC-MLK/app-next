@@ -5,13 +5,15 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useEffect, useState } from 'react';
-import { startOfYear, eachWeekOfInterval, format, parse, addDays, startOfWeek, addMinutes } from 'date-fns';
+import { eachWeekOfInterval, format, parse, addDays, startOfWeek, addMinutes } from 'date-fns';
+import { updateAvailability } from '@/app/lib/action'; // Importez la fonction
+import { FaTrash } from 'react-icons/fa'; // Importez l'icône de suppression
 
 interface Availability {
   [key: string]: any;
 }
 
-export default function Calendar({ availability }: { availability: string }) {
+export default function Calendar({ availability, intervenantId }: { availability: string, intervenantId: string }) {
   const [calendarView, setCalendarView] = useState("timeGridWeek");
   const [headerToolbar, setHeaderToolbar] = useState({
     left: "title prev,next today",
@@ -19,6 +21,7 @@ export default function Calendar({ availability }: { availability: string }) {
     right: "timeGridDay,timeGridWeek,dayGridMonth",
   });
   const [events, setEvents] = useState<{ title: string; start: string; end: string; url?: string; groupId?: string }[]>([]);
+  const [availabilities, setAvailabilities] = useState<Availability>(JSON.parse(availability));
 
   const handleWindowResize = () => {
     const { innerWidth } = window;
@@ -113,6 +116,119 @@ export default function Calendar({ availability }: { availability: string }) {
     setEvents(transformedEvents);
   }, [availability]);
 
+  const handleSelect = async (selectInfo: any) => {
+    const { start, end } = selectInfo;
+    const weekNumber = format(start, 'I');
+    const day = start.toLocaleDateString('fr-FR', { weekday: 'long' });
+
+    const newAvailability = {
+      days: day,
+      from: format(start, 'HH:mm'),
+      to: format(end, 'HH:mm')
+    };
+
+    setAvailabilities((prev) => {
+      const updated = { ...prev };
+
+      // Si la semaine est par défaut, copiez les disponibilités par défaut dans la semaine spécifique
+      if (!updated[`S${weekNumber}`] && updated.default) {
+        updated[`S${weekNumber}`] = [...updated.default];
+      }
+
+      if (!updated[`S${weekNumber}`]) {
+        updated[`S${weekNumber}`] = [];
+      }
+
+      // Vérifiez si une entrée avec les mêmes horaires existe déjà
+      const existingEntry = updated[`S${weekNumber}`].find(
+        (a: any) => a.from === newAvailability.from && a.to === newAvailability.to
+      );
+
+      if (existingEntry) {
+        // Ajoutez le nouveau jour à l'entrée existante
+        const existingDays = existingEntry.days.split(', ');
+        if (!existingDays.includes(day)) {
+          existingEntry.days = [...existingDays, day].join(', ');
+        }
+      } else {
+        // Ajoutez une nouvelle entrée
+        updated[`S${weekNumber}`].push(newAvailability);
+      }
+
+      return updated;
+    });
+
+    setEvents((prev) => [
+      ...prev,
+      {
+        title: 'Disponible',
+        start: start.toISOString(),
+        end: end.toISOString(),
+        groupId: `S${weekNumber}`
+      }
+    ]);
+
+    await updateAvailability(intervenantId, availabilities); // Appelez la fonction pour mettre à jour les disponibilités
+  };
+
+  const handleEventClick = async (clickInfo: any) => {
+    const { event } = clickInfo;
+    const weekNumber = event.groupId;
+    const day = new Date(event.start).toLocaleDateString('fr-FR', { weekday: 'long' });
+    const from = format(event.start, 'HH:mm');
+    const to = format(event.end, 'HH:mm');
+  
+    setAvailabilities((prev) => {
+      const updated = { ...prev };
+      const weekAvailability = updated[weekNumber];
+  
+      if (weekAvailability) {
+        const entryIndex = weekAvailability.findIndex(
+          (a: any) => a.from === from && a.to === to
+        );
+  
+        if (entryIndex !== -1) {
+          const entry = weekAvailability[entryIndex];
+          const days = entry.days.split(', ').filter((d: string) => d !== day);
+  
+          if (days.length > 0) {
+            entry.days = days.join(', ');
+          } else {
+            weekAvailability.splice(entryIndex, 1);
+          }
+  
+          if (weekAvailability.length === 0) {
+            delete updated[weekNumber];
+          }
+        }
+      }
+  
+      return updated;
+    });
+  
+    setEvents((prev) => prev.filter(e => e !== event));
+
+    console.log(availabilities);
+  
+    event.remove();
+    await updateAvailability(intervenantId, availabilities); // Appelez la fonction pour mettre à jour les disponibilités
+  };
+
+  const renderEventContent = (eventInfo: any) => {
+    return (
+      <div className="relative">
+        <span>{eventInfo.timeText}</span>
+        <div className="mt-1">{eventInfo.event.title}</div>
+        <button
+          onClick={() => handleEventClick({ event: eventInfo.event })}
+          className="absolute top-0 right-0 p-2 m-1 bg-white rounded-md"
+        >
+          <FaTrash className="text-slate-700" />
+        </button>
+      </div>
+    );
+  };
+
   return (
     <FullCalendar
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -131,6 +247,8 @@ export default function Calendar({ availability }: { availability: string }) {
       selectable={true}
       selectMirror={true}
       dayMaxEvents={true}
+      select={handleSelect}
+      eventContent={renderEventContent} // Utilisez la fonction pour personnaliser le contenu des événements
       dayHeaderContent={(args) => {
         const date = new Date(args.date);
         const day = date.toLocaleDateString("fr-FR", { weekday: "short" });

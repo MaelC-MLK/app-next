@@ -27,9 +27,10 @@ export default async function Page({ params }: { params: { key: string } }) {
 
   return (
     <main>
-            
-      <h1>Disponibilités de {intervenants.firstname}</h1>
-      <Calendar availability={intervenants.availability ?? ''} />
+      <div className='m-12'>
+      <h1 className='text-xl font-semibold'>Disponibilités de {intervenants.firstname}</h1>
+      <Calendar availability={intervenants.availability ?? ''} intervenantId={intervenants.id.toString()} />
+      </div>
     </main>
   );
 }
