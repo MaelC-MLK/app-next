@@ -122,13 +122,6 @@ export default function Calendar({ availability, intervenantId }: { availability
   const handleSelect = async (selectInfo: any) => {
     const { start, end } = selectInfo;
     const weekNumber = format(start, 'I');
-  
-    // Vérifiez si la semaine est 52 ou 1
-    if (weekNumber === '52' || weekNumber === '1') {
-      alert("Vous ne pouvez pas créer de disponibilités pour les semaines 52 et 1.");
-      return;
-    }
-  
     const day = start.toLocaleDateString('fr-FR', { weekday: 'long' });
   
     const newAvailability = {
@@ -165,23 +158,24 @@ export default function Calendar({ availability, intervenantId }: { availability
         updated[`S${weekNumber}`].push(newAvailability);
       }
   
+      // Mettez à jour les événements
+      setEvents((prev) => [
+        ...prev,
+        {
+          title: 'Disponible',
+          start: start.toISOString(),
+          end: end.toISOString(),
+          groupId: `S${weekNumber}`
+        }
+      ]);
+  
+      // Appelez la fonction pour mettre à jour les disponibilités
+      updateAvailability(intervenantId, updated); 
+  
       return updated;
     });
-  
-    setEvents((prev) => [
-      ...prev,
-      {
-        title: 'Disponible',
-        start: start.toISOString(),
-        end: end.toISOString(),
-        groupId: `S${weekNumber}`
-      }
-    ]);
-  
-    console.log(availabilities);
-  
-    await updateAvailability(intervenantId, availabilities); // Appelez la fonction pour mettre à jour les disponibilités
   };
+  
   
 
   const handleEventClick = async (clickInfo: any) => {
