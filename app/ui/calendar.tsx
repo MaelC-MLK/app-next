@@ -168,6 +168,8 @@ export default function Calendar({ availability, intervenantId }: { availability
       }
     ]);
 
+    console.log(availabilities);
+
     await updateAvailability(intervenantId, availabilities); // Appelez la fonction pour mettre à jour les disponibilités
   };
 
