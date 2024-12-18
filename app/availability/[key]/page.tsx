@@ -1,15 +1,10 @@
-import { fetchIntervenantByKey } from '@/app/lib/action';
+import { fetchIntervenantByKey} from '@/app/lib/action';
 import { notFound } from 'next/navigation';
 import Calendar from '@/app/ui/calendar';
 
-interface PageParams {
-  params: {
-    key: string;
-  };
-}
-
-export default async function Page({ params }: PageParams) {
+export default async function Page({ params }: { params: { key: string } }) {
   const { key } = params;
+
   const intervenants = await fetchIntervenantByKey(key);
 
   if (!intervenants) {
@@ -27,11 +22,13 @@ export default async function Page({ params }: PageParams) {
     );
   }
 
+
+
   return (
     <main>
       <div className='m-12'>
-        <h1 className='text-xl font-semibold'>Disponibilités de {intervenants.firstname}</h1>
-        <Calendar availability={intervenants.availability ?? ''} intervenantId={intervenants.id.toString()} />
+      <h1 className='text-xl font-semibold'>Disponibilités de {intervenants.firstname}</h1>
+      <Calendar availability={intervenants.availability ?? ''} intervenantId={intervenants.id.toString()} />
       </div>
     </main>
   );
