@@ -1,14 +1,39 @@
-import { fetchIntervenantByKey} from '@/app/lib/action';
+import { useEffect, useState } from 'react';
+import { fetchIntervenantByKey } from '@/app/lib/action';
 import { notFound } from 'next/navigation';
 import Calendar from '@/app/ui/calendar';
 
-export default async function Page({ params }: { params: { key: string } }) {
-  const { key } = params;
+interface PageParams {
+  params: {
+    key: string;
+  };
+}
 
-  const intervenants = await fetchIntervenantByKey(key);
+interface Intervenant {
+  firstname: string;
+  enddate: string;
+  availability: string | null;
+  id: number;
+}
+
+export default function Page({ params }: PageParams) {
+  const { key } = params;
+  const [intervenants, setIntervenants] = useState<Intervenant | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchIntervenantByKey(key);
+      if (!data) {
+        notFound();
+      } else {
+        setIntervenants(data);
+      }
+    };
+    fetchData();
+  }, [key]);
 
   if (!intervenants) {
-    notFound();
+    return <div>Loading...</div>;
   }
 
   const currentDate = new Date();
@@ -22,13 +47,11 @@ export default async function Page({ params }: { params: { key: string } }) {
     );
   }
 
-
-
   return (
     <main>
       <div className='m-12'>
-      <h1 className='text-xl font-semibold'>Disponibilités de {intervenants.firstname}</h1>
-      <Calendar availability={intervenants.availability ?? ''} intervenantId={intervenants.id.toString()} />
+        <h1 className='text-xl font-semibold'>Disponibilités de {intervenants.firstname}</h1>
+        <Calendar availability={intervenants.availability ?? ''} intervenantId={intervenants.id.toString()} />
       </div>
     </main>
   );

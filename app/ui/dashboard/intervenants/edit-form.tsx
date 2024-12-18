@@ -38,7 +38,7 @@ export default function EditIntervenantForm({
         {/* Intervenant Email */}
         <div className="mb-4">
           <label htmlFor="email" className="mb-2 block text-sm font-medium">
-            Email de l'intervenant
+            Email de l&apos;intervenant
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -68,7 +68,7 @@ export default function EditIntervenantForm({
         {/* Intervenant FirstName */}
         <div className="mb-4">
           <label htmlFor="firstname" className="mb-2 block text-sm font-medium">
-            Prénom de l'intervenant
+            Prénom de l&apos;intervenant
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -98,7 +98,7 @@ export default function EditIntervenantForm({
         {/* Intervenant LastName */}
         <div className="mb-4">
           <label htmlFor="lastname" className="mb-2 block text-sm font-medium">
-            Nom de l'intervenant
+            Nom de l&apos;intervenant
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">

@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { ConfirmationPopup } from '@/app/ui/dashboard/intervenants/confirmationPopup';
 
 
-export function CopyKeyButton({ intervenantKey, firstname, lastname }: { intervenantKey: string, firstname: string, lastname: string }) {
+export function CopyKeyButton({ intervenantKey }: { intervenantKey: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopyKey = () => {
@@ -57,7 +57,7 @@ export function UpdateIntervenant({ id }: { id: number }) {
         <PencilIcon className="w-5" />
       </Link>
       <span className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden w-max rounded bg-black px-2 py-1 text-xs text-white group-hover:block">
-        Modifier l'utilisateur
+        Modifier l&apos;utilisateur
       </span>
     </div>
   );
@@ -85,7 +85,7 @@ export function DeleteIntervenant({ id }: { id: number }) {
         </button>
       </form>
       <span className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden w-max rounded bg-black px-2 py-1 text-xs text-white group-hover:block">
-        Supprimer l'utilisateur
+        Supprimer l&apos;utilisateur
       </span>
     </div>
   );

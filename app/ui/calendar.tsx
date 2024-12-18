@@ -17,7 +17,7 @@ import { updateAvailability } from "@/app/lib/action"; // Importez la fonction
 import { FaTrash } from "react-icons/fa"; // Importez l'icône de suppression
 
 interface Availability {
-  [key: string]: any;
+  [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export default function Calendar({
@@ -78,6 +78,7 @@ export default function Calendar({
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function AvailabilityIntoEvents(availability: any) {
       let events: {
         title: string;
@@ -180,6 +181,7 @@ export default function Calendar({
     setEvents(transformedEvents);
   }, [availability]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSelect = async (selectInfo: any) => {
     const { start, end } = selectInfo;
     const weekNumber = format(start, "I");
@@ -205,6 +207,7 @@ export default function Calendar({
 
       // Vérifiez si une entrée avec les mêmes horaires existe déjà
       const existingEntry = updated[`S${weekNumber}`].find(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (a: any) =>
           a.from === newAvailability.from && a.to === newAvailability.to
       );
@@ -238,6 +241,7 @@ export default function Calendar({
     });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEventClick = async (clickInfo: any) => {
     const { event } = clickInfo;
     const weekNumber = event.groupId;
@@ -253,6 +257,7 @@ export default function Calendar({
 
       if (weekAvailability) {
         const entryIndex = weekAvailability.findIndex(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (a: any) => a.from === from && a.to === to
         );
 
@@ -283,6 +288,7 @@ export default function Calendar({
     await updateAvailability(intervenantId, availabilities); // Appelez la fonction pour mettre à jour les disponibilités
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderEventContent = (eventInfo: any) => {
     return (
       <div className="relative">

@@ -213,6 +213,11 @@ const CreateIntervenantSchema = z.object({
   enddate: z.string().nonempty({ message: 'End date is required' }),
 });
 
+interface PostgresError extends Error {
+  code: string;
+  constraint: string;
+}
+
 export async function createIntervenant(prevState: State, formData: FormData) {
   const validatedFields = CreateIntervenantSchema.safeParse({
     firstname: formData.get('firstname'),
@@ -239,7 +244,8 @@ export async function createIntervenant(prevState: State, formData: FormData) {
     client.release();
   } catch (error) {
     console.error('Database Error:', error);
-    if ((error as any).code === '23505' && (error as any).constraint === 'unique_email') {
+    const dbError = error as PostgresError;
+    if (dbError.code === '23505' && dbError.constraint === 'unique_email') {
       return {
         errors: { email: ['Email already exists'] },
       };
@@ -252,23 +258,6 @@ export async function createIntervenant(prevState: State, formData: FormData) {
   revalidatePath('/dashboard/intervenants');
   redirect('/dashboard/intervenants');
 }
-
-const UpdateIntervenantSchema = z.object({
-  firstname: z.string().nonempty({ message: 'First name is required' }),
-  lastname: z.string().nonempty({ message: 'Last name is required' }),
-  email: z.string().email({ message: 'Invalid email address' }),
-  enddate: z.string().nonempty({ message: 'End date is required' }),
-});
-
-export type UpdateState = {
-  errors?: {
-    firstname?: string[];
-    lastname?: string[];
-    email?: string[];
-    enddate?: string[];
-  };
-  message?: string | null;
-};
 
 export async function updateIntervenant(prevState: UpdateState, formData: FormData, id: string) {
   const validatedFields = UpdateIntervenantSchema.safeParse({
@@ -295,7 +284,8 @@ export async function updateIntervenant(prevState: UpdateState, formData: FormDa
     client.release();
   } catch (error) {
     console.error('Database Error:', error);
-    if ((error as any).code === '23505' && (error as any).constraint === 'unique_email') {
+    const dbError = error as PostgresError;
+    if (dbError.code === '23505' && dbError.constraint === 'unique_email') {
       return {
         errors: { email: ['Email already exists'] },
       };
@@ -308,6 +298,24 @@ export async function updateIntervenant(prevState: UpdateState, formData: FormDa
   revalidatePath('/dashboard/intervenants');
   redirect('/dashboard/intervenants');
 }
+
+const UpdateIntervenantSchema = z.object({
+  firstname: z.string().nonempty({ message: 'First name is required' }),
+  lastname: z.string().nonempty({ message: 'Last name is required' }),
+  email: z.string().email({ message: 'Invalid email address' }),
+  enddate: z.string().nonempty({ message: 'End date is required' }),
+});
+
+export type UpdateState = {
+  errors?: {
+    firstname?: string[];
+    lastname?: string[];
+    email?: string[];
+    enddate?: string[];
+  };
+  message?: string | null;
+};
+
 
 export async function fetchIntervenantByKey(key: string): Promise<Intervenant | undefined> {
   try {
