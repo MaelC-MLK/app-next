@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { fetchIntervenantByKey } from '@/app/lib/action';
 import { notFound } from 'next/navigation';
 import Calendar from '@/app/ui/calendar';
@@ -9,31 +8,12 @@ interface PageParams {
   };
 }
 
-interface Intervenant {
-  firstname: string;
-  enddate: string;
-  availability: string | null;
-  id: number;
-}
-
-export default function Page({ params }: PageParams) {
+export default async function Page({ params }: PageParams) {
   const { key } = params;
-  const [intervenants, setIntervenants] = useState<Intervenant | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchIntervenantByKey(key);
-      if (!data) {
-        notFound();
-      } else {
-        setIntervenants(data);
-      }
-    };
-    fetchData();
-  }, [key]);
+  const intervenants = await fetchIntervenantByKey(key);
 
   if (!intervenants) {
-    return <div>Loading...</div>;
+    notFound();
   }
 
   const currentDate = new Date();
