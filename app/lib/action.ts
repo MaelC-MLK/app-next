@@ -317,7 +317,7 @@ export type UpdateState = {
 };
 
 
-export async function fetchIntervenantByKey(key: string): Promise<Intervenant | undefined> {
+export async function fetchIntervenantByKey(key: string): Promise<Intervenant | null> {
   try {
     const client = await db.connect();
     const result = await client.query('SELECT * FROM public.intervenants WHERE key = $1', [key]);

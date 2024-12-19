@@ -1,4 +1,4 @@
-import { fetchIntervenantByKey} from '@/app/lib/action';
+import { fetchIntervenantByKey } from '@/app/lib/action';
 import { notFound } from 'next/navigation';
 import Calendar from '@/app/ui/calendar';
 
@@ -9,6 +9,7 @@ export default async function Page({ params }: { params: { key: string } }) {
 
   if (!intervenants) {
     notFound();
+    return null; // Ajout d'un return null après notFound() pour éviter de continuer après notFound()
   }
 
   const currentDate = new Date();
@@ -22,13 +23,11 @@ export default async function Page({ params }: { params: { key: string } }) {
     );
   }
 
-
-
   return (
     <main>
       <div className='m-12'>
-      <h1 className='text-xl font-semibold'>Disponibilités de {intervenants.firstname}</h1>
-      <Calendar availability={intervenants.availability ?? ''} intervenantId={intervenants.id.toString()} />
+        <h1 className='text-xl font-semibold'>Disponibilités de {intervenants.firstname}</h1>
+        <Calendar availability={intervenants.availability ?? ''} intervenantId={intervenants.id.toString()} />
       </div>
     </main>
   );
